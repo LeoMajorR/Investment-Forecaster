@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Slider,
+} from '@mui/material';
 import axios from 'axios';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -7,6 +15,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { Bar } from 'react-chartjs-2'; // Import Bar from Chart.js
 
 const App = () => {
   const [amount, setAmount] = useState(1000);
@@ -17,8 +26,8 @@ const App = () => {
     setAmount(e.target.value);
   };
 
-  const handleTimeChange = (e) => {
-    setTime(e.target.value);
+  const handleTimeChange = (e, value) => {
+    setTime(value);
   };
 
   const handleCalculate = () => {
@@ -31,6 +40,8 @@ const App = () => {
         console.error(error);
       });
   };
+
+  
 
   return (
     <Container>
@@ -54,15 +65,17 @@ const App = () => {
           margin="normal"
           sx={{ width: '50%' }}
         />
-        <TextField
-          label="Time"
-          value={time}
-          onChange={handleTimeChange}
-          type="number"
-          variant="outlined"
-          margin="normal"
-          sx={{ width: '50%' }}
-        />
+        <Box sx={{ width: '50%', marginTop: 2 }}>
+          <Typography id="time-slider-label">Time</Typography>
+          <Slider
+            value={time}
+            onChange={handleTimeChange}
+            valueLabelDisplay="auto"
+            min={1}
+            max={25}
+            aria-labelledby="time-slider-label"
+          />
+        </Box>
         <Button variant="contained" onClick={handleCalculate} sx={{ width: '50%', marginTop: 2 }}>
           Calculate
         </Button>
