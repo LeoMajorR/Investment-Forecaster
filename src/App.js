@@ -98,7 +98,7 @@ function FinancialCalculator() {
           sx={{ width: '50%' }}
         />
         <Box sx={{ width: '40%', marginTop: 2 }}>
-          <Typography id="time-slider-label">Time</Typography>
+          <Typography id="time-slider-label">Time (in Yrs)</Typography>
           <Slider
             value={time}
             onChange={handleTimeChange}
@@ -178,7 +178,14 @@ function SIPCalculator() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100vh">
+    // <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+    <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: 4,
+          width: '100%',
+        }}>
   <Typography variant="h4" gutterBottom>
     SIP Calculator
   </Typography>
@@ -237,8 +244,74 @@ function SIPCalculator() {
       </Box>
     </Box>
   )}
+  <Box mt={4}>
+    <Typography variant="h5" gutterBottom>
+      SIP Calculator – Systematic Investment Plan Calculator
+    </Typography>
+    <Typography variant="body1" gutterBottom>
+      SIP is a method of investing a fixed sum, regularly, in a mutual fund scheme. SIP allows one to buy units on a 
+      given date each month, so that one can implement a saving plan for themselves. The biggest advantage of SIP is 
+      that one need not time the market. In addition, one need not worry about ups and downs of the market. 
+      Some of the key benefits of SIP are:
+    </Typography>
+    <ul>
+      <li>
+        <Typography variant="body1" gutterBottom>
+          Rupee cost averaging
+        </Typography>
+      </li>
+      <li>
+        <Typography variant="body1" gutterBottom>
+          Power of compounding
+        </Typography>
+      </li>
+      <li>
+        <Typography variant="body1" gutterBottom>
+          Flexibility
+        </Typography>
+      </li>
+      <li>
+        <Typography variant="body1" gutterBottom>
+          No need to time the market
+        </Typography>
+      </li>
+    </ul>
 </Box>
+<Box mt={4}>
+  <Typography variant="h5" gutterBottom>
+    How to use SIP Calculator?
+  </Typography>
+  <Typography variant="body1" gutterBottom>
+    A SIP plan calculator works on the following formula:
+    <br/>
+    <br/>
+      {`M = P * ({(1 + i)^n - 1}/i)* (1 + i)`}
+      <br />
+  <br />
+  In the above formula –
+  <ul>
+    <li>M is the amount you receive upon maturity.</li>
+    <li>P is the amount you invest at regular intervals.</li>
+    <li>n is the number of payments you have made.</li>
+    <li>i is the periodic rate of interest.</li>
+  </ul>
+  Take for example you want to invest Rs. 1,000 per month for 12 months at a periodic rate of interest of 12%.
+  <br />
+  <br />
+  then the monthly rate of return will be 12%/12 = 1/100=0.01
+  <br />
+  <br />
+  Hence, M = {'1000 * ((1.01^12 - 1)/0.01) * (1.01) = Rs 13,184'}
+  <br />
+  <br />
+  which gives Rs 13,184 approximately in a year.
+  <br />
+  <br />
+  The rate of interest on a SIP will differ as per market conditions. It may increase or decrease, which will change the estimated returns.
 
+    </Typography>
+    </Box>
+</Box>
   );
 }
 
@@ -248,28 +321,39 @@ function App() {
     setActiveTab(newValue);
   };
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar position="static">
         <Toolbar>
-        <Typography variant="h6">Your App Name</Typography>
-        <Tabs value={activeTab} onChange={handleChange} aria-label="calculator tabs" sx={{ justifyContent: 'center' }}>
-          <Tab value="financial" label="Financial Calculator" />
-          <Tab value="sip" label="SIP Calculator" />
-        </Tabs>
+          <Typography variant="h6">BTP Project</Typography>
+          <Tabs value={activeTab} onChange={handleChange} aria-label="calculator tabs" sx={{ justifyContent: 'center' }}>
+            <Tab value="financial" label="Financial Calculator" />
+            <Tab value="sip" label="SIP Calculator" />
+          </Tabs>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="lg">
-        <Box mt={4}>
-          {activeTab === 'financial' ? <FinancialCalculator /> : <SIPCalculator />}
-        </Box>
-      </Container>
-      <style>
-        {`
-          .MuiTab-root {
-            color: #fff;
-          }
-        `}
-      </style>
+      <div style={{ flexGrow: 1, marginTop: '2rem', marginBottom: '2rem' }}>
+        <Container maxWidth="lg">
+          <Box mt={4} style={{ minHeight: "calc(100vh - 200px)" }}>
+  {activeTab === 'financial' ? <FinancialCalculator /> : <SIPCalculator />}
+</Box>
+
+          {/* {activeTab === 'financial' ? <FinancialCalculator /> : <SIPCalculator />} */}
+        </Container>
+      </div>
+      <AppBar position="static" style={{ backgroundColor: '#222', top: 'auto', bottom: 0 }}>
+        <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="https://i.ibb.co/TtWCnHS/800px-Indian-Institute-of-Technology-Goa-Logo-svg-removebg-preview.png" alt="IIT Goa logo" style={{ height: '2rem', marginRight: '1rem' }} />
+            <Typography variant="body2" style={{ color: '#fff' }}>
+              BTP Project By: Vivek Narway
+            </Typography>
+          </div>
+          <Typography variant="body2" style={{ color: '#fff' }}>
+            Under Professor: Dr. Sharad Sinha<br />
+            Institute: IIT Goa
+          </Typography>
+        </Toolbar>
+      </AppBar>
     </div>
   );
 }
