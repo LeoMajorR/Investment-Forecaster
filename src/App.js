@@ -157,22 +157,20 @@ function SIPCalculator() {
   const [time, setTime] = useState(5);
   const [rate, setRate] = useState(15.0);
   const [results, setResults] = useState({});
+  const[showPie,setShowPie]=useState(false);
+  const[img3, setImg3]=useState('');
 
   const handleAmountChange = (e) => {
     setAmount(e.target.value);
   };
 
   const handleSIPCalculate = async () => {
-    // try {
-    //   const response = await axios.get(`http://127.0.0.1:8000/sip/${amount}/${time}/${rate}/`);
-    //   setResults(response.data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
     axios
         .get(`http://127.0.0.1:8000/sip/${amount}/${time}/${rate}/`)
         .then((response) => {
           setResults(response.data);
+          setImg3("http://127.0.0.1:8000/"+response.data['Graphs']);
+          setShowPie(true);
         })
         .catch((error) => {
           console.error(error);
@@ -181,50 +179,66 @@ function SIPCalculator() {
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100vh">
-      <Typography variant="h4" gutterBottom>
-        SIP Calculator
-      </Typography>
-      <Box mb={2}>
-        <TextField id="amount" label="Amount" variant="outlined" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+  <Typography variant="h4" gutterBottom>
+    SIP Calculator
+  </Typography>
+  <Box mb={2}>
+    <TextField id="amount" label="Amount" variant="outlined" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+  </Box>
+  <Box mb={2}>
+    <TextField id="time" label="Time" variant="outlined" type="number" value={time} onChange={(e) => setTime(e.target.value)} />
+  </Box>
+  <Box display="flex" alignItems="center">
+    <Typography variant="body1" style={{ marginRight: '10px' }}>
+      Rate:
+    </Typography>
+    <Slider
+      min={1.0}
+      max={30.0}
+      step={0.1}
+      value={rate}
+      onChange={(e, value) => setRate(value)}
+      style={{ width: '200px' }}
+    />
+    <Typography variant="body1" style={{ marginLeft: '10px' }}>
+      {rate.toFixed(1)}%
+    </Typography>
+  </Box>
+  <Box mt={2}>
+    <Button variant="contained" color="primary" onClick={handleSIPCalculate}>
+      Invest
+    </Button>
+  </Box>
+  {results.hasOwnProperty('Invested Amount') && (
+    <Box mt={4} display="flex" justifyContent="center" flexWrap="wrap">
+      <Box mr={4}>
+        <img src={img3} alt="Chart" width="400" height="300" />
       </Box>
-      <Box mb={2}>
-        <TextField id="time" label="Time" variant="outlined" type="number" value={time} onChange={(e) => setTime(e.target.value)} />
-      </Box>
-      <Box display="flex" alignItems="center">
-        <Typography variant="body1" style={{ marginRight: '10px' }}>
-          Rate:
+      <Box>
+        <Typography variant="h5" gutterBottom>
+          Results:
         </Typography>
-        <Slider
-          min={1.0}
-          max={30.0}
-          step={0.1}
-          value={rate}
-          onChange={(e, value) => setRate(value)}
-          style={{ width: '200px' }}
-        />
-        <Typography variant="body1" style={{ marginLeft: '10px' }}>
-          {rate.toFixed(1)}%
-        </Typography>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>Amount Invested:</TableCell>
+              <TableCell>{results['Invested Amount']}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Estimated Return:</TableCell>
+              <TableCell>{results['Estimated Return']}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Total Value:</TableCell>
+              <TableCell>{results['Total Value']}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </Box>
-      <Box mt={2}>
-        <Button variant="contained" color="primary" onClick={handleSIPCalculate}>
-          Calculate
-        </Button>
-      </Box>
-      {results.hasOwnProperty('Amount Invested') &&
-        <Box mt={4}>
-          <Typography variant="h5" gutterBottom>
-            Results:
-          </Typography>
-          <ul>
-            <li>Amount Invested: {results['Amount Invested']}</li>
-            <li>Time: {results['Time']}</li>
-            <li>Rate: {results['Rate']}</li>
-            <li>Investment Growth: {results['Investment Growth']}</li>
-          </ul>
-        </Box>
-      }
     </Box>
+  )}
+</Box>
+
   );
 }
 
