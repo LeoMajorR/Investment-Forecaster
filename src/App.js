@@ -45,6 +45,7 @@ const useStyles = makeStyles({
 function FinancialCalculator() {
   const [amount, setAmount] = useState(10000);
   const [time, setTime] = useState(5);
+  const [months, setMonths] = useState(0);
   const [financialInstruments, setFinancialInstruments] = useState([]);
   const [showCharts, setShowCharts] = useState(false);
   const[img1,setImg1]=useState('');
@@ -58,9 +59,13 @@ function FinancialCalculator() {
     setTime(value);
   };
 
+  const handleMonthChange = (e, value) => {
+    setMonths(value);
+  };
+
   const handleCalculate = async () => {
     axios
-      .get(`http://127.0.0.1:8000/finCal/${amount}/${time}/`)
+      .get(`http://127.0.0.1:8000/finCal/${amount}/${time}/${months}/`)
       .then((response) => {
         setFinancialInstruments(response.data['Financial Instruments']);
 
@@ -97,13 +102,24 @@ function FinancialCalculator() {
           margin="normal"
           sx={{ width: '50%' }}
         />
+        <Box sx={{ width: '20%', marginTop: 2 }}>
+          <Typography id="months-slider-label">Months</Typography>
+          <Slider
+            value={months}
+            onChange={handleMonthChange}
+            valueLabelDisplay="auto"
+            min={0}
+            max={12}
+            aria-labelledby="months-slider-label"
+          />
+        </Box>
         <Box sx={{ width: '40%', marginTop: 2 }}>
-          <Typography id="time-slider-label">Time (in Yrs)</Typography>
+          <Typography id="time-slider-label">Years</Typography>
           <Slider
             value={time}
             onChange={handleTimeChange}
             valueLabelDisplay="auto"
-            min={1}
+            min={0}
             max={25}
             aria-labelledby="time-slider-label"
           />
@@ -124,13 +140,13 @@ function FinancialCalculator() {
   </Box>
 )}
         {financialInstruments.length > 0 ? (
-          <TableContainer component={Paper} sx={{ width: '80%', marginTop: 4 }}>
+          <TableContainer component={Paper} sx={{ width: '80%', marginTop: 4}}>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Instrument Name</TableCell>
                   <TableCell align="right">Rate</TableCell>
-                  <TableCell align="right">Maturing Amount</TableCell>
+                  <TableCell align="left" paddingLeft='10vh'>Maturing Amount</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -139,8 +155,8 @@ function FinancialCalculator() {
                     <TableCell component="th" scope="row">
                       {instrument['Instrument Name']}
                     </TableCell>
-                    <TableCell align="right">{instrument['Rate']}</TableCell>
-                    <TableCell align="right">{instrument['Maturing Amount']}</TableCell>
+                    <TableCell align="right">{instrument['Rate']}%</TableCell>
+                    <TableCell align="left" sx={{paddingLeft:"50px"}}>Rs. {instrument['Maturing Amount']}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
