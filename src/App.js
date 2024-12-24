@@ -26,6 +26,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
+import { grey } from '@mui/material/colors';
 
 const useStyles = makeStyles({
   container: {
@@ -129,7 +130,7 @@ function FinancialCalculator() {
         </Button>
               {showCharts && (
   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 4, width:'100%' }}>
-    <Grid container spacing={1}>
+    <Grid container spacing={5}>
       <Grid item xs={6}>
         <img src={img1} alt="Bar chart" width="100%" />
       </Grid>
@@ -142,13 +143,14 @@ function FinancialCalculator() {
         {financialInstruments.length > 0 ? (
           <TableContainer component={Paper} sx={{ width: '80%', marginTop: 4}}>
             <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Instrument Name</TableCell>
-                  <TableCell align="right">Rate</TableCell>
-                  <TableCell align="left" paddingLeft='10vh'>Maturing Amount</TableCell>
-                </TableRow>
-              </TableHead>
+              <TableHead sx={{fontWeight: 'bold',
+    backgroundColor: grey}}>
+        <TableRow >
+          <TableCell fontWeight="bold">Instrument Name</TableCell>
+          <TableCell align="right" fontWeight="bold">Rate</TableCell>
+          <TableCell align="left" paddingLeft='10vh' fontWeight="bold">Maturing Amount</TableCell>
+        </TableRow>
+      </TableHead>
               <TableBody>
                 {financialInstruments.map((instrument, index) => (
                   <TableRow key={index}>
